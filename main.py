@@ -31,7 +31,7 @@ def handle_packet(packet):
         tracker["timestamp"] = current_time
 
         if tracker["count"] > SCAN_LIMIT:
-            print(f"IP {src_ip} exceeded scan limit. Blocking...")
+            print(f"IP {src_ip} exceeded scan limit. Blocking for 10 minutes...")
             FirewallManager.block_ip(src_ip)
             unblock_time = current_time + BLOCK_DURATION
             unblock_tasks.append((src_ip, unblock_time))

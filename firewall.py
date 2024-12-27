@@ -1,4 +1,19 @@
 import subprocess
+import logging
+import os
+import sys
+
+# Ensure script is run as root
+def ensure_root_permissions():
+    if os.geteuid() != 0:
+        logging.critical("This script must be run as root. Exiting.")
+        sys.exit(1)
+
+# Call the function to check root permissions
+ensure_root_permissions()
+
+# Set up logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 class FirewallManager:
     @staticmethod
@@ -11,20 +26,20 @@ class FirewallManager:
     def block_ip(ip):
         """Block the given IP using iptables."""
         if FirewallManager.is_ip_blocked(ip):
-            print(f"IP {ip} is already blocked. Skipping...")
+            logging.info(f"IP {ip} is already blocked. Skipping...")
             return
 
-        print(f"Blocking IP: {ip}")
+        logging.info(f"Blocking IP: {ip}")
         try:
             subprocess.run(["sudo", "iptables", "-A", "INPUT", "-s", ip, "-j", "DROP"], check=True)
         except subprocess.CalledProcessError as e:
-            print(f"Error blocking IP {ip}: {e}")
+            logging.error(f"Error blocking IP {ip}: {e}")
 
     @staticmethod
     def unblock_ip(ip):
         """Unblock the given IP using iptables."""
-        print(f"Unblocking IP: {ip}")
+        logging.info(f"Unblocking IP: {ip}")
         try:
             subprocess.run(["sudo", "iptables", "-D", "INPUT", "-s", ip, "-j", "DROP"], check=True)
         except subprocess.CalledProcessError as e:
-            print(f"Error unblocking IP {ip}: {e}")
+            logging.error(f"Error unblocking IP {ip}: {e}")

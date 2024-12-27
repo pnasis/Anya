@@ -1,3 +1,4 @@
+import logging
 from scapy.all import *
 from firewall import FirewallManager
 from collections import defaultdict
@@ -12,13 +13,16 @@ SCAN_LIMIT = 5
 # Tracking dictionary for IP scans
 scan_tracker = defaultdict(lambda: {"count": 0, "timestamp": None})
 
+# Set up logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
 def handle_packet(packet):
     if TCP in packet and packet[TCP].flags == "S":  # SYN flag detected
         src_ip = packet[IP].src
         dst_port = packet[IP].dport
         src_port = packet[IP].sport
 
-        print(f"Scan detected on port {dst_port} from {src_ip}")
+        logging.info(f"Scan detected on port {dst_port} from {src_ip}")
 
         # Update scan count and timestamp
         current_time = datetime.now()
@@ -31,7 +35,7 @@ def handle_packet(packet):
         tracker["timestamp"] = current_time
 
         if tracker["count"] > SCAN_LIMIT:
-            print(f"IP {src_ip} exceeded scan limit. Blocking for 10 minutes...")
+            logging.warning(f"IP {src_ip} exceeded scan limit. Blocking for 10 minutes...")
             FirewallManager.block_ip(src_ip)
             unblock_time = current_time + BLOCK_DURATION
             unblock_tasks.append((src_ip, unblock_time))
@@ -43,7 +47,7 @@ def handle_packet(packet):
             TCP(sport=dst_port, dport=src_port, flags="SA", seq=100, ack=packet[TCP].seq + 1)
         )
         send(syn_ack, verbose=0)
-        print(f"Sent SYN-ACK to {src_ip} on port {dst_port}")
+        logging.info(f"Sent SYN-ACK to {src_ip} on port {dst_port}")
 
         # Send "try harder" message
         data_packet = (
@@ -52,7 +56,7 @@ def handle_packet(packet):
             Raw(load="Try Harder! :)")
         )
         send(data_packet, verbose=0)
-        print(f"Sent data packet with message 'try harder' to {src_ip} on port {dst_port}")
+        logging.info(f"Sent data packet with message 'try harder' to {src_ip} on port {dst_port}")
 
 def unblock_expired_ips():
     """Unblock IPs whose block duration has expired."""
@@ -75,4 +79,4 @@ if __name__ == "__main__":
             unblock_expired_ips()
             time.sleep(5)
     except KeyboardInterrupt:
-        print("\nStopping...")
+        logging.info("\nStopping...")

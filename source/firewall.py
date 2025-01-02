@@ -34,7 +34,7 @@ class FirewallManager:
         logging.info("Program started.")
 
     @staticmethod
-    def is_ip_blocked(ip):
+    def check_ip(ip):
         """Check if the IP is already blocked in iptables."""
         result = subprocess.run(["sudo", "iptables", "-L", "-n"], stdout=subprocess.PIPE, text=True)
         return ip in result.stdout
@@ -42,7 +42,7 @@ class FirewallManager:
     @staticmethod
     def block_ip(ip):
         """Block the given IP using iptables."""
-        if FirewallManager.is_ip_blocked(ip):
+        if FirewallManager.check_ip(ip):
             logging.info(f"IP {ip} is already blocked. Skipping...")
             return
 
@@ -55,6 +55,10 @@ class FirewallManager:
     @staticmethod
     def unblock_ip(ip):
         """Unblock the given IP using iptables."""
+        if FirewallManager.check_ip(ip):
+            logging.info(f"IP {ip} is already unblocked. Skipping...")
+            return
+
         logging.info(f"Unblocking IP: {ip}")
         try:
             subprocess.run(["sudo", "iptables", "-D", "INPUT", "-s", ip, "-j", "DROP"], check=True)

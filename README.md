@@ -1,5 +1,5 @@
 # Anya
-<div align=cennter>![Project Logo](assets/logo.png)</div>
+![Project Logo](assets/logo.png)
 
 This project is a Python-based firewall designed to detect TCP SYN scans and block malicious IP addresses using iptables. It also responds to detected scans with custom messages.
 

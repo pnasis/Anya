@@ -69,6 +69,8 @@ def unblock_expired_ips():
 if __name__ == "__main__":
     unblock_tasks = []
 
+    FirewallManager.init()
+
     # Start sniffing in a separate thread
     sniff_thread = threading.Thread(target=lambda: sniff(filter="tcp", prn=handle_packet), daemon=True)
     sniff_thread.start()
@@ -79,4 +81,4 @@ if __name__ == "__main__":
             unblock_expired_ips()
             time.sleep(5)
     except KeyboardInterrupt:
-        logging.info("\nStopping...")
+        logging.info("Stopping...")

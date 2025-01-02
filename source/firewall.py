@@ -3,6 +3,7 @@ import logging
 import socket
 import os
 import sys
+from pyfiglet import Figlet
 
 # Ensure script is run as root
 def ensure_root_permissions():
@@ -17,6 +18,21 @@ ensure_root_permissions()
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 class FirewallManager:
+    @staticmethod
+    def init():
+        """Initialize the program by displaying ASCII art and credits, and logging the start."""
+        # Generate ASCII art for the program name
+        program_name = "Anya"
+        ascii_art = Figlet(font='slant').renderText(program_name)
+        print(ascii_art)
+
+        # Display credits
+        credits = "\nCreated by: pnasis\nVersion: 1.0.0\n"
+        print(credits)
+
+        # Log the program start
+        logging.info("Program started.")
+
     @staticmethod
     def get_host_ip():
         """Get the IP address of the host machine."""

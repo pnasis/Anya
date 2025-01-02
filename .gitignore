@@ -1,0 +1,11 @@
+/source/.main.py.kate-swp
+/source/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.env
+*.venv
+*.egg
+*.eggs
+*.coverage
+.cache

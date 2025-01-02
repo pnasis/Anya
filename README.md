@@ -53,7 +53,7 @@ This project is a Python-based firewall designed to detect TCP SYN scans and blo
 
 - The following parameters can be configured in `main.py`:
   - `BLOCK_DURATION`: Duration to block an IP address (default: 10 minutes).
-  - `SCAN_LIMIT`: Maximum number of scans allowed before blocking an IP (default: 5).
+  - `SCAN_LIMIT`: Maximum number of scans allowed before blocking an IP (default: 3).
 
 ## File Structure
 

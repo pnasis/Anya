@@ -78,6 +78,6 @@ if __name__ == "__main__":
     try:
         while True:
             unblock_expired_ips()
-            time.sleep(5)sud
+            time.sleep(5)
     except KeyboardInterrupt:
         logging.info("Stopping...")

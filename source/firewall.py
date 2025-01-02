@@ -17,7 +17,7 @@ ensure_root_permissions()
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 class FirewallManager:
-     @staticmethod
+    @staticmethod
     def get_host_ip():
         """Get the IP address of the host machine."""
         try:

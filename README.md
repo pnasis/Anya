@@ -17,15 +17,14 @@ This project is a Python-based firewall designed to detect TCP SYN scans and blo
 - Root privileges (for modifying iptables)
 - Required Python libraries:
   - `scapy`
-  - `datetime`
-  - `threading`
+  - `pyfiglet`
 
 ## Installation
 
 1. Clone the repository:
    ```bash
    git clone https://github.com/pnasis/Anya.git
-   cd Anya
+   cd Anya/
    ```
 
 2. Install the required Python libraries:
@@ -35,6 +34,7 @@ This project is a Python-based firewall designed to detect TCP SYN scans and blo
 
 3. Ensure the script has execution permissions:
    ```bash
+   cd source/
    chmod +x main.py
    ```
 

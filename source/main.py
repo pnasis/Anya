@@ -8,7 +8,7 @@ import time
 
 # Configuration
 BLOCK_DURATION = timedelta(minutes=10)
-SCAN_LIMIT = 5
+SCAN_LIMIT = 3
 
 # Tracking dictionary for IP scans
 scan_tracker = defaultdict(lambda: {"count": 0, "timestamp": None})
@@ -67,11 +67,16 @@ def unblock_expired_ips():
             unblock_tasks.remove((ip, unblock_time))
 
 if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("[-] Usage: sudo python main.py <host_ip>")
+        sys.exit(1)
+
     FirewallManager.init()
     unblock_tasks = []
 
     # Start sniffing in a separate thread
-    sniff_thread = threading.Thread(target=lambda: sniff(filter="tcp", prn=handle_packet), daemon=True)
+    bpf_filter = f"tcp and not src host {sys.argv[1]}"
+    sniff_thread = threading.Thread(target=lambda: sniff(filter=bpf_filter, prn=handle_packet), daemon=True)
     sniff_thread.start()
 
     # Monitor unblock tasks in the main thread

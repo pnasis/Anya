@@ -27,21 +27,11 @@ class FirewallManager:
         print(ascii_art)
 
         # Display credits
-        credits = "\nCreated by: pnasis\nVersion: 1.0.0\n"
+        credits = "\nCreated by: pnasis\nVersion: v1.0\n"
         print(credits)
 
         # Log the program start
         logging.info("Program started.")
-
-    @staticmethod
-    def get_host_ip():
-        """Get the IP address of the host machine."""
-        try:
-            # Dynamically find the host IP address
-            return socket.gethostbyname(socket.gethostname())
-        except Exception as e:
-            logging.error(f"Error getting host IP: {e}")
-            return None
 
     @staticmethod
     def is_ip_blocked(ip):
@@ -52,10 +42,6 @@ class FirewallManager:
     @staticmethod
     def block_ip(ip):
         """Block the given IP using iptables."""
-        host_ip = FirewallManager.get_host_ip()
-        if ip==host_ip:
-            return
-
         if FirewallManager.is_ip_blocked(ip):
             logging.info(f"IP {ip} is already blocked. Skipping...")
             return
@@ -70,10 +56,6 @@ class FirewallManager:
     def unblock_ip(ip):
         """Unblock the given IP using iptables."""
         logging.info(f"Unblocking IP: {ip}")
-        host_ip = FirewallManager.get_host_ip()
-        if ip==host_ip:
-            return
-
         try:
             subprocess.run(["sudo", "iptables", "-D", "INPUT", "-s", ip, "-j", "DROP"], check=True)
         except subprocess.CalledProcessError as e:

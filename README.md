@@ -59,10 +59,14 @@ This project is a Python-based firewall designed to detect TCP SYN scans and blo
 
 ```
 .
-├── main.py               # Main script for packet sniffing and handling
-├── firewall.py           # Class for managing iptables operations
-├── requirements.txt      # Python library dependencies
+├── assets/               # Directory containing assets like images
+│   └── logo.png          # Logo for the project
+├── source/               # Source code for the project
+│   ├── main.py           # Main script for packet sniffing and handling
+│   └── firewall.py       # Class for managing iptables operations
+├── LICENSE               # License for the project
 ├── README.md             # Project documentation
+├── requirements.txt      # Python library dependencies
 ```
 
 ## Security Notes

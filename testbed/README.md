@@ -62,7 +62,8 @@ docker-compose down
 ```
 
 ## File Structure
-```bash
+
+```
 .
 ├── testbed/                    # Directory containing required testbed files
 │   ├── Dockerfile.firewall     # Dockerfile for building the firewall container

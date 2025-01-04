@@ -59,14 +59,20 @@ This project is a Python-based firewall designed to detect TCP SYN scans and blo
 
 ```
 .
-├── assets/               # Directory containing assets like images
-│   └── logo.png          # Logo for the project
-├── source/               # Source code for the project
-│   ├── main.py           # Main script for packet sniffing and handling
-│   └── firewall.py       # Class for managing iptables operations
-├── LICENSE               # License for the project
-├── README.md             # Project documentation
-├── requirements.txt      # Python library dependencies
+├── assets/                     # Directory containing assets like images
+│   └── logo.png                # Logo for the project
+├── source/                     # Source code for the project
+│   ├── main.py                 # Main script for packet sniffing and handling
+│   └── firewall.py             # Class for managing iptables operations
+├── testbed/                    # Directory containing required testbed files
+│   ├── Dockerfile.firewall     # Dockerfile for building the firewall container
+│   ├── Dockerfile.scanner      # Dockerfile for building the scanner container
+│   ├── entrypoint.sh           # Script to dynamically set the IP and run the firewall
+│   ├── docker-compose.yml      # Docker compose file for orchestrating the testbed
+│   └── README.md               # Testbed documentation
+├── LICENSE                     # License for the project
+├── README.md                   # Project documentation
+├── requirements.txt            # Python library dependencies
 ```
 
 ## Security Notes

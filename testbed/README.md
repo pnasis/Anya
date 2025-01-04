@@ -85,7 +85,7 @@ docker-compose down
 
 ### Firewall Program Errors
 
-1. Check the logs of the firewall machine:
+Check the logs of the firewall machine:
 ```bash
     docker logs firewall-machine
 ```

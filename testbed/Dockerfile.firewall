@@ -1,0 +1,21 @@
+FROM python:3.9-slim
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the source code and the entrypoint script
+COPY ../source/ /app/source/
+COPY entrypoint.sh /app/entrypoint.sh
+
+# Copy requirements and install dependencies
+COPY ../requirements.txt /app/
+RUN pip install -r requirements.txt
+
+# Make the entrypoint script executable
+RUN chmod +x /app/entrypoint.sh
+
+# Expose necessary ports
+EXPOSE 22 23 80 443
+
+# Use the entrypoint script
+ENTRYPOINT ["/app/entrypoint.sh"]

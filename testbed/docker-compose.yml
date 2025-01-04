@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  firewall:
+    build:
+      context: .
+      dockerfile: Dockerfile.firewall
+    container_name: firewall-machine
+    networks:
+      - test-network
+    ports:
+      - "80:80"
+      - "443:443"
+    cap_add:
+      - NET_ADMIN
+
+  scanner:
+    build:
+      context: .
+      dockerfile: Dockerfile.scanner
+    container_name: scanner-machine
+    networks:
+      - test-network
+    stdin_open: true
+    tty: true
+
+networks:
+  test-network:
+    driver: bridge

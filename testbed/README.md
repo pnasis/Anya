@@ -17,20 +17,24 @@ This project sets up a test environment using Docker to evaluate the behavior of
 
 ## Setup Instructions
 ### 1. Clone the repository:
-
 ```bash
 git clone https://github.com/pnasis/Anya.git
 cd Anya/testbed
 ```
 
-### 2. Build and Start the Environment
+### 2. Create a Docker Network:
+```bash
+docker network create firewall-net
+```
+
+### 3. Build and Start the Environment
 
 Run the following command to build the Docker images and start the containers:
 ```bash
 docker-compose up --build
 ```
 
-### 3. Verify the Firewall Program
+### 4. Verify the Firewall Program
 
 Check the logs of the firewall-machine to ensure it has started with its IP address:
 ```bash
@@ -38,7 +42,7 @@ docker logs firewall-machine
 
 ```
 
-### 4. Test the Setup
+### 5. Test the Setup
 #### Access the scanner machine
 
 In a new terminal, run:

@@ -3,14 +3,14 @@ version: "3.8"
 services:
   firewall:
     build:
-      context: .
-      dockerfile: Dockerfile.firewall
+      context: ..
+      dockerfile: testbed/Dockerfile.firewall
     container_name: firewall-machine
     networks:
-      - firewall-net
+      - test-network
+    volumes:
+      - ../source:/app/source  # Mount the source directory
     ports:
-      - "22:22"
-      - "23:23"
       - "80:80"
       - "443:443"
     cap_add:
@@ -22,7 +22,7 @@ services:
       dockerfile: Dockerfile.scanner
     container_name: scanner-machine
     networks:
-      - firewall-net
+      - test-network
     stdin_open: true
     tty: true
 

@@ -1,21 +1,33 @@
+# Use the Python slim image as the base
 FROM python:3.9-slim
 
-# Set the working directory
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the source code and the entrypoint script
-COPY ../source/ /app/source/
-COPY entrypoint.sh /app/entrypoint.sh
+# Install required system dependencies, including libpcap
+RUN apt-get update && apt-get install -y \
+    libpcap-dev \
+    iproute2 \
+    iptables \
+    net-tools \
+    python3-dev \
+    gcc && \
+    rm -rf /var/lib/apt/lists/*
 
-# Copy requirements and install dependencies
-COPY ../requirements.txt /app/
-RUN pip install -r requirements.txt
+
+# Copy requirements.txt and install dependencies
+COPY ../requirements.txt /app/requirements.txt
+RUN pip install -r /app/requirements.txt
+
+# Copy the entrypoint script into the container
+COPY testbed/entrypoint.sh /app/entrypoint.sh
 
 # Make the entrypoint script executable
 RUN chmod +x /app/entrypoint.sh
 
-# Expose necessary ports
-EXPOSE 22 23 80 443
+# Expose necessary ports for the firewall
+EXPOSE 80 443
 
-# Use the entrypoint script
+# Use the entrypoint script to start the firewall program
 ENTRYPOINT ["/app/entrypoint.sh"]
+COPY testbed/entrypoint.sh /app/entrypoint.sh

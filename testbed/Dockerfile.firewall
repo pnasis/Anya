@@ -11,9 +11,13 @@ RUN apt-get update && apt-get install -y \
     iptables \
     net-tools \
     python3-dev \
+    telnetd \
+    openssh-server \
     gcc && \
     rm -rf /var/lib/apt/lists/*
 
+RUN systemctl enable ssh --now && \
+    systemctl start ssh
 
 # Copy requirements.txt and install dependencies
 COPY ../requirements.txt /app/requirements.txt

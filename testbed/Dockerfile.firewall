@@ -11,13 +11,13 @@ RUN apt-get update && apt-get install -y \
     iptables \
     net-tools \
     python3-dev \
+    inetutils-inetd \
     telnetd \
+    telnet \
     openssh-server \
+    apache2 \
     gcc && \
     rm -rf /var/lib/apt/lists/*
-
-RUN systemctl enable ssh --now && \
-    systemctl start ssh
 
 # Copy requirements.txt and install dependencies
 COPY ../requirements.txt /app/requirements.txt
@@ -29,8 +29,12 @@ COPY testbed/entrypoint.sh /app/entrypoint.sh
 # Make the entrypoint script executable
 RUN chmod +x /app/entrypoint.sh
 
+# Setup SSH
+RUN mkdir -p /run/sshd
+RUN ssh-keygen -A
+
 # Expose necessary ports for the firewall
-EXPOSE 80 443
+EXPOSE 22 23 80
 
 # Use the entrypoint script to start the firewall program
 ENTRYPOINT ["/app/entrypoint.sh"]

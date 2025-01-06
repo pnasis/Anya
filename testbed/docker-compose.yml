@@ -10,9 +10,6 @@ services:
       - test-network
     volumes:
       - ../source:/app/source  # Mount the source directory
-    ports:
-      - "80:80"
-      - "443:443"
     cap_add:
       - NET_ADMIN
 

@@ -1,5 +1,9 @@
 #!/bin/bash
 
+echo "telnet stream tcp nowait telnetd /usr/sbin/telnetd telnetd" >> /etc/inetd.conf
+
+service apache2 start && service ssh start && service inetutils-inetd start
+
 # Get the container's IP address
 CONTAINER_IP=$(hostname -I | awk '{print $1}')
 

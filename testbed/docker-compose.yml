@@ -9,7 +9,7 @@ services:
     networks:
       - test-network
     volumes:
-      - ../source:/app/source  # Mount the source directory
+      - ../source:/app/source
     cap_add:
       - NET_ADMIN
 

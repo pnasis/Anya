@@ -6,6 +6,7 @@ WORKDIR /app
 
 # Install required system dependencies, including libpcap
 RUN apt-get update && apt-get install -y \
+    sudo \
     libpcap-dev \
     iproute2 \
     iptables \

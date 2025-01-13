@@ -1,0 +1,11 @@
+# Use a lightweight Debian-based image
+FROM debian:bullseye-slim
+
+# Update package lists and install nmap
+RUN apt-get update && apt-get install -y nmap && rm -rf /var/lib/apt/lists/*
+
+# Set a working directory (optional)
+WORKDIR /app
+
+# Keep the container interactive-ready
+CMD ["bash"]

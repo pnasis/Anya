@@ -1,6 +1,5 @@
 import subprocess
 import logging
-import socket
 import os
 import sys
 from pyfiglet import Figlet
@@ -34,13 +33,24 @@ class FirewallManager:
         logging.info("Program started.")
 
     @staticmethod
-    def check_ip(ip):
-        """Check if the IP is already blocked in iptables."""
-        result = subprocess.run(["sudo", "iptables", "-L", "-n"], stdout=subprocess.PIPE, text=True)
-        return ip in result.stdout
+    def check_ip(ip: str) -> bool:
+        """Return True if there is an INPUT DROP rule for this IP."""
+        try:
+            subprocess.run(
+                ["iptables", "-C", "INPUT", "-s", ip, "-j", "DROP"],
+                check=True,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+            return True
+        except subprocess.CalledProcessError:
+            return False
+        except FileNotFoundError:
+            logging.error("iptables command not found on this system.")
+            return False
 
     @staticmethod
-    def block_ip(ip):
+    def block_ip(ip: str) -> None:
         """Block the given IP using iptables."""
         if FirewallManager.check_ip(ip):
             logging.info(f"IP {ip} is already blocked. Skipping...")
@@ -48,19 +58,22 @@ class FirewallManager:
 
         logging.info(f"Blocking IP: {ip}")
         try:
-            subprocess.run(["sudo", "iptables", "-A", "INPUT", "-s", ip, "-j", "DROP"], check=True)
+            # Use -I to insert at top so the DROP is effective immediately
+            subprocess.run(["iptables", "-I", "INPUT", "-s", ip, "-j", "DROP"], check=True)
+            logging.info(f"IP {ip} successfully blocked.")
         except subprocess.CalledProcessError as e:
             logging.error(f"Error blocking IP {ip}: {e}")
 
     @staticmethod
-    def unblock_ip(ip):
+    def unblock_ip(ip: str) -> None:
         """Unblock the given IP using iptables."""
-        if FirewallManager.check_ip(ip):
-            logging.info(f"IP {ip} is already unblocked. Skipping...")
+        if not FirewallManager.check_ip(ip):
+            logging.info(f"IP {ip} is not blocked. Skipping unblock...")
             return
 
         logging.info(f"Unblocking IP: {ip}")
         try:
-            subprocess.run(["sudo", "iptables", "-D", "INPUT", "-s", ip, "-j", "DROP"], check=True)
+            subprocess.run(["iptables", "-D", "INPUT", "-s", ip, "-j", "DROP"], check=True)
+            logging.info(f"IP {ip} successfully unblocked.")
         except subprocess.CalledProcessError as e:
             logging.error(f"Error unblocking IP {ip}: {e}")
